@@ -71,6 +71,9 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Notifications.Wpf, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Notifications.Wpf.0.1.1\lib\net461\Notifications.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
@@ -183,6 +186,9 @@
     <Compile Include="ViewModel\MainComponent.cs" />
     <Compile Include="ViewModel\Status.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\Test.xaml.cs">
+      <DependentUpon>Test.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -202,6 +208,10 @@
     <Page Include="Resources\IconsNonShared.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Test.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

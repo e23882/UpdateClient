@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -15,6 +16,7 @@ using System.Windows.Threading;
 using AngleSharp;
 using AngleSharp.Dom;
 using MahAppBase.Command;
+using Notifications.Wpf;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
@@ -27,6 +29,7 @@ namespace MahAppBase.ViewModel
     public class MainComponent : ViewModelBase
     {
         #region Declarations
+        System.Windows.Forms.NotifyIcon nIcon = new System.Windows.Forms.NotifyIcon();
         private WindowState _State = WindowState.Normal;
         private Visibility _Render = Visibility.Visible;
         private int _FlyOutWidth = 500;
@@ -58,6 +61,7 @@ namespace MahAppBase.ViewModel
         LeoQueue<QueueModel> messageQueue = new LeoQueue<QueueModel>();
         int _scheduleID = 0;
         private string ConfigPath = $"{System.AppDomain.CurrentDomain.BaseDirectory}Setting.config";
+        private Visibility _MainWindowVisibly = Visibility.Visible;
         #endregion
 
         #region Property
@@ -186,11 +190,52 @@ namespace MahAppBase.ViewModel
                 OnPropertyChanged();
             }
         }
+        public WindowState State
+        {
+            get
+            {
+                return _State;
+            }
+            set
+            {
+                _State = value;
+                switch (_State)
+                {
+                    case WindowState.Minimized:
+                        MainWindowVisibly = Visibility.Hidden;
+                        nIcon.Visible = true;
+                        break;
+                    case WindowState.Normal:
+                        MainWindowVisibly = Visibility.Visible;
+                        nIcon.Visible = false;
+                        break;
+                    case WindowState.Maximized:
+                        MainWindowVisibly = Visibility.Visible;
+                        nIcon.Visible = false;
+                        break;
+                }
+                OnPropertyChanged();
+            }
+        }
+        public Visibility MainWindowVisibly
+        {
+            get
+            {
+                return _MainWindowVisibly;
+            }
+            set
+            {
+                _MainWindowVisibly = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
         
         #region MemberFunction
+
         public MainComponent()
         {
+            
             messageQueue.OnEnqueue += MessageQueue_OnEnqueue;
             MainWindowClosed = new NoParameterCommand(MainWindowClosedAction);
             ButtonScheduleClick = new NoParameterCommand(ButtonScheduleClickAction);
@@ -200,15 +245,64 @@ namespace MahAppBase.ViewModel
             ButtonDownloadClick = new NoParameterCommand(ButtonDownloadClickAction);
             CheckAndReadConfig();
             GetData();
+            InitIcon();
         }
 
         private void MessageQueue_OnEnqueue(object sender, EventArgs e)
         {
-            //Notifier.ShowSuccess(messageQueue.Dequeue());
+        }
+
+        public void InitIcon()
+        {
+            nIcon.Icon = new Icon("Icon.ico");
+            nIcon.Visible = false;
+            nIcon.MouseDoubleClick += NIcon_MouseDoubleClick;
+            #region Init Contextmenu
+            ContextMenu cm = new ContextMenu();
+            
+            MenuItem miMax = new MenuItem();
+            miMax.Text = "放大";
+            miMax.Click += Mi_Click;
+            cm.MenuItems.Add(miMax);
+
+            MenuItem miClose = new MenuItem();
+            miClose.Text = "關閉";
+            miClose.Click += Mi_Click;
+            cm.MenuItems.Add(miClose);
+            #endregion
+            nIcon.ContextMenu = cm;
+        }
+
+        private void NIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            State = WindowState.Normal;
+        }
+
+        private void Mi_Click(object sender, EventArgs e)
+        {
+            if ((sender as MenuItem) is null)
+                return;
+
+            switch((sender as MenuItem).Text)
+            {
+                case "放大":
+                    State = WindowState.Normal;
+                    break;
+                case "關閉":
+                    System.Windows.Application.Current.Shutdown();
+                    break;
+            }
         }
 
         private void MainComponent_DataReadFinish(object sender, EventArgs e)
         {
+            var notificationManager = new NotificationManager();
+            notificationManager.Show(new NotificationContent
+            {
+                Title = "更新結果",
+                Message = "更新完成",
+                Type = NotificationType.Success,
+            });
             Notifier.ShowSuccess($"更新完成");
         }
 
@@ -228,6 +322,12 @@ namespace MahAppBase.ViewModel
 
         private async void ButtonDownloadClickAction()
         {
+            new NotificationManager().Show(new NotificationContent
+            {
+                Title = "更新通知",
+                Message = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}開始檢查更新",
+                Type = NotificationType.Information,
+            });
             Notifier.ShowSuccess($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}開始檢查更新");
             FlyOutScheduleIsOpen = true;
             var newSchedule = new DataModel();
@@ -244,9 +344,23 @@ namespace MahAppBase.ViewModel
             {
                 case QueueModel.TypeDatail.Success:
                     Notifier.ShowSuccess(dt.Message);
+                    new NotificationManager().Show(new MahAppBase.View.Test("更新通知", dt.Message, TargetPath));
+                    //new NotificationManager().Show(new NotificationContent
+                    //{
+                    //    Title = "更新通知",
+                    //    Message = dt.Message,
+                    //    Type = NotificationType.Success,
+                    //});
                     break;
                 case QueueModel.TypeDatail.Fail :
                     Notifier.ShowError(dt.Message);
+
+                    new NotificationManager().Show(new NotificationContent
+                    {
+                        Title = "更新通知",
+                        Message = dt.Message,
+                        Type = NotificationType.Error,
+                    });
                     break;
             }
         }
@@ -522,6 +636,7 @@ namespace MahAppBase.ViewModel
                 _Source = topPath;
                 test(topPath);
             }
+
             private void test(string path)
             {
                 foreach (var file in Directory.GetFiles(path))
@@ -567,6 +682,20 @@ namespace MahAppBase.ViewModel
                         tempCount++;
                         DataCollection.Where(x => x.ThreadID == ThreadID).FirstOrDefault().Message = $"{data.Count} / {tempCount}";
                     }
+                    //Parallel.ForEach(data, (item, loopState) =>
+                    //{
+                    //   var subPath = item.Replace(_Source, "");
+                    //    //File.Copy(item, _Target + subPath, true);
+                    //    //檢查對應路徑是否存在
+                    //    // \\192.168.1.155\LeoShare\Release
+                    //    var fullPath = _Target + subPath;
+                    //    var dirSplitIndex = fullPath.LastIndexOf(@"\");
+                    //    if (!System.IO.Directory.Exists(fullPath.Substring(0, dirSplitIndex)))
+                    //        System.IO.Directory.CreateDirectory(fullPath.Substring(0, dirSplitIndex));//不存在就建立目錄
+                    //    File.Copy(item, _Target + subPath, true);
+                    //    tempCount++;
+                    //    DataCollection.Where(x => x.ThreadID == ThreadID).FirstOrDefault().Message = $"{data.Count} / {tempCount}";
+                    //});
                 }
                 
             }

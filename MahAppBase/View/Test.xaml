@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="MahAppBase.View.Test"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MahAppBase.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="Green">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+            <TextBlock x:Name="tbTitle" Text="通知" FontSize="15" FontFamily="微軟正黑體" Grid.Row="1" Grid.Column="1" Foreground="White"/>
+            <TextBlock x:Name="tbContent" Text="內文1234567891111111111111111111111111111111111111111111" FontSize="15" FontFamily="微軟正黑體" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Foreground="White"/>
+            <Button Content="啟動程式" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Click="Button_Click"/>
+            
+    </Grid>
+
+
+</UserControl>
