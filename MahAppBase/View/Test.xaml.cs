@@ -2,18 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MahAppBase.View
 {
@@ -22,7 +12,6 @@ namespace MahAppBase.View
     /// </summary>
     public partial class Test : UserControl
     {
-
         #region Declarations
         #endregion
 
@@ -66,7 +55,5 @@ namespace MahAppBase.View
             process.StandardInput.WriteLine("exit");
         }
         #endregion
-
-
     }
 }

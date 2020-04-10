@@ -62,6 +62,7 @@ namespace MahAppBase.ViewModel
         int _scheduleID = 0;
         private string ConfigPath = $"{System.AppDomain.CurrentDomain.BaseDirectory}Setting.config";
         private Visibility _MainWindowVisibly = Visibility.Visible;
+        private bool _ShowInToolBar = true;
         #endregion
 
         #region Property
@@ -204,14 +205,17 @@ namespace MahAppBase.ViewModel
                     case WindowState.Minimized:
                         MainWindowVisibly = Visibility.Hidden;
                         nIcon.Visible = true;
+                        ShowInToolBar = false;
                         break;
                     case WindowState.Normal:
                         MainWindowVisibly = Visibility.Visible;
                         nIcon.Visible = false;
+                        ShowInToolBar = true;
                         break;
                     case WindowState.Maximized:
                         MainWindowVisibly = Visibility.Visible;
                         nIcon.Visible = false;
+                        ShowInToolBar = true;
                         break;
                 }
                 OnPropertyChanged();
@@ -226,6 +230,18 @@ namespace MahAppBase.ViewModel
             set
             {
                 _MainWindowVisibly = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool ShowInToolBar
+        {
+            get
+            {
+                return _ShowInToolBar;
+            }
+            set
+            {
+                _ShowInToolBar = value;
                 OnPropertyChanged();
             }
         }

@@ -10,7 +10,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:mahAppBase="clr-namespace:MahAppBase"
-        mc:Ignorable="d" Title="" Height="300" Width="700" x:Name="mwMain" WindowState="{Binding State}" ShowInTaskbar="False"  Visibility="{Binding MainWindowVisibly}">
+        mc:Ignorable="d" Title="" Height="300" Width="700" x:Name="mwMain" WindowState="{Binding State}" ShowInTaskbar="{Binding ShowInToolBar}"  Visibility="{Binding MainWindowVisibly}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closed">
             <i:InvokeCommandAction Command="{Binding MainWindowClosed}"/>
