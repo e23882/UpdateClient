@@ -182,7 +182,6 @@
     <Compile Include="Converter\ReverseBooleanConverter.cs" />
     <Compile Include="Converter\ReverseIntegerConverter.cs" />
     <Compile Include="Converter\VisibleConverter.cs" />
-    <Compile Include="ViewModel\CallMemberNameAttribute.cs" />
     <Compile Include="ViewModel\MainComponent.cs" />
     <Compile Include="ViewModel\Status.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />

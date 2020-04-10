@@ -8,6 +8,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -251,7 +253,6 @@ namespace MahAppBase.ViewModel
 
         public MainComponent()
         {
-            
             messageQueue.OnEnqueue += MessageQueue_OnEnqueue;
             MainWindowClosed = new NoParameterCommand(MainWindowClosedAction);
             ButtonScheduleClick = new NoParameterCommand(ButtonScheduleClickAction);
@@ -260,7 +261,6 @@ namespace MahAppBase.ViewModel
             ChooseTargetButtonClick = new NoParameterCommand(ChooseTargetButtonClickAction);
             ButtonDownloadClick = new NoParameterCommand(ButtonDownloadClickAction);
             CheckAndReadConfig();
-            GetData();
             InitIcon();
         }
 
@@ -359,18 +359,9 @@ namespace MahAppBase.ViewModel
             switch (dt.Type)
             {
                 case QueueModel.TypeDatail.Success:
-                    Notifier.ShowSuccess(dt.Message);
-                    new NotificationManager().Show(new MahAppBase.View.Test("更新通知", dt.Message, TargetPath));
-                    //new NotificationManager().Show(new NotificationContent
-                    //{
-                    //    Title = "更新通知",
-                    //    Message = dt.Message,
-                    //    Type = NotificationType.Success,
-                    //});
+                    new NotificationManager().Show(new MahAppBase.View.Test("更新通知", dt.Message, TargetPath), "", new TimeSpan(1, 0, 0, 0, 0));
                     break;
                 case QueueModel.TypeDatail.Fail :
-                    Notifier.ShowError(dt.Message);
-
                     new NotificationManager().Show(new NotificationContent
                     {
                         Title = "更新通知",
@@ -484,19 +475,6 @@ namespace MahAppBase.ViewModel
             
         }
 
-        public bool GetData()
-        {
-            try
-            {
-                return true;
-            }
-            catch (Exception ie)
-            {
-                //localExecuteResult = $"取得資料失敗。/r/n{ie.Message}/r/n{ie.StackTrace}";
-                return false;
-            }
-        }
-
         public void ButtonScheduleClickAction()
         {
             FlyOutScheduleIsOpen = true;
@@ -585,7 +563,7 @@ namespace MahAppBase.ViewModel
             #region Memberfunction
             public event PropertyChangedEventHandler PropertyChanged;
 
-            public void OnPropertyChanged([CallMemberName]string propertyName = "")
+            public void OnPropertyChanged([CallerMemberName]string propertyName = "")
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
@@ -644,9 +622,6 @@ namespace MahAppBase.ViewModel
             #endregion
 
             #region Memberfunction
-            #endregion
-
-
             public Recursive(string topPath)
             {
                 _Source = topPath;
@@ -682,14 +657,13 @@ namespace MahAppBase.ViewModel
                 if (data.Count > 0)
                 {
                     int tempCount = 0;
+                    data = data.FindAll(x => !x.Contains(".pdb") && !x.Contains(".txt"));
                     DataCollection.Where(x => x.ThreadID == ThreadID).FirstOrDefault().Message = $"{data.Count} / {tempCount}";
 
                     foreach (var item in data)
                     {
                         var subPath = item.Replace(_Source, "");
-                        //File.Copy(item, _Target + subPath, true);
                         //檢查對應路徑是否存在
-                        // \\192.168.1.155\LeoShare\Release
                         var fullPath = _Target + subPath;
                         var dirSplitIndex = fullPath.LastIndexOf(@"\");
                         if (!System.IO.Directory.Exists(fullPath.Substring(0, dirSplitIndex)))
@@ -698,23 +672,9 @@ namespace MahAppBase.ViewModel
                         tempCount++;
                         DataCollection.Where(x => x.ThreadID == ThreadID).FirstOrDefault().Message = $"{data.Count} / {tempCount}";
                     }
-                    //Parallel.ForEach(data, (item, loopState) =>
-                    //{
-                    //   var subPath = item.Replace(_Source, "");
-                    //    //File.Copy(item, _Target + subPath, true);
-                    //    //檢查對應路徑是否存在
-                    //    // \\192.168.1.155\LeoShare\Release
-                    //    var fullPath = _Target + subPath;
-                    //    var dirSplitIndex = fullPath.LastIndexOf(@"\");
-                    //    if (!System.IO.Directory.Exists(fullPath.Substring(0, dirSplitIndex)))
-                    //        System.IO.Directory.CreateDirectory(fullPath.Substring(0, dirSplitIndex));//不存在就建立目錄
-                    //    File.Copy(item, _Target + subPath, true);
-                    //    tempCount++;
-                    //    DataCollection.Where(x => x.ThreadID == ThreadID).FirstOrDefault().Message = $"{data.Count} / {tempCount}";
-                    //});
                 }
-                
             }
+            #endregion
         }
         #endregion
 

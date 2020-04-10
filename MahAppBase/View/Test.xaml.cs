@@ -13,11 +13,10 @@ namespace MahAppBase.View
     public partial class Test : UserControl
     {
         #region Declarations
+        private string _ExecPath = string.Empty;
         #endregion
 
         #region Property
-
-        private string _ExecPath;
         public string ExecPath
         {
             get
@@ -50,7 +49,7 @@ namespace MahAppBase.View
             process.StartInfo.RedirectStandardError = true; 
             process.StartInfo.FileName = "cmd.exe";
             process.Start();
-            process.StandardInput.WriteLine($"start {ExecPath}/START_IMS.bat");
+            process.StandardInput.WriteLine($"start {ExecPath}\\START_IMS.bat");
             process.StandardInput.AutoFlush = true;
             process.StandardInput.WriteLine("exit");
         }

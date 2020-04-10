@@ -21,11 +21,8 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
-            <TextBlock x:Name="tbTitle" Text="通知" FontSize="15" FontFamily="微軟正黑體" Grid.Row="1" Grid.Column="1" Foreground="White"/>
-            <TextBlock x:Name="tbContent" Text="內文1234567891111111111111111111111111111111111111111111" FontSize="15" FontFamily="微軟正黑體" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Foreground="White"/>
+            <TextBlock x:Name="tbTitle" Text="Default Title" FontSize="15" FontFamily="微軟正黑體" Grid.Row="1" Grid.Column="1" Foreground="White"/>
+            <TextBlock x:Name="tbContent" Text="Default Content" FontSize="15" FontFamily="微軟正黑體" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Foreground="White"/>
             <Button Content="啟動程式" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Click="Button_Click"/>
-            
     </Grid>
-
-
 </UserControl>

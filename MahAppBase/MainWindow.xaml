@@ -10,7 +10,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:mahAppBase="clr-namespace:MahAppBase"
-        mc:Ignorable="d" Title="" Height="300" Width="700" x:Name="mwMain" WindowState="{Binding State}" ShowInTaskbar="{Binding ShowInToolBar}"  Visibility="{Binding MainWindowVisibly}">
+        mc:Ignorable="d" Title="" Height="500" Width="600" x:Name="mwMain" WindowState="{Binding State}" ShowInTaskbar="{Binding ShowInToolBar}"  Visibility="{Binding MainWindowVisibly}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closed">
             <i:InvokeCommandAction Command="{Binding MainWindowClosed}"/>
@@ -70,7 +70,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <avalondock:DockingManager x:Name="mtTab" Grid.Row="0" Visibility="{Binding Render}" Margin="{Binding WebMargin}" >
+        <avalondock:DockingManager x:Name="mtTab" Grid.Row="0" Visibility="{Binding Render}">
             <avalondock:DockingManager.Theme>
                 <avalondock:MetroTheme/>
             </avalondock:DockingManager.Theme>
@@ -142,7 +142,6 @@
                                             <i:InvokeCommandAction Command="{Binding ChooseTargetButtonClick}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
-
                                 </TextBox>
                                 <Button Content="Download" Command="{Binding ButtonDownloadClick}" Grid.Row="2" Margin="0,5,0,0"/>
                                 <ProgressBar Grid.Row="3" Margin="0,5,0,0" Foreground="LightGreen" IsIndeterminate="True" Background="DarkGray" BorderBrush="Transparent" Minimum="0" Maximum="{Binding TotalFileCount}" Value="{Binding CurrentDownloadCount}"/>
@@ -152,18 +151,18 @@
                 </avalondock:LayoutPanel>
             </avalondock:LayoutRoot>
         </avalondock:DockingManager>
-        <StatusBar DataContext="{Binding CurrentStatus}" Grid.Row="1" >
+        <StatusBar Grid.Row="1" >
             <StatusBarItem>
                 <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
                     <TextBlock Text="Cpu" HorizontalAlignment="Center" Margin="0,0,8,0" FontWeight="Bold"/>
                     <Grid>
-                        <ProgressBar Minimum="0" Maximum="50" Value="{Binding Cpu}" Width="100" VerticalAlignment="Top" Height="15" FontWeight="Heavy"/>
-                        <TextBlock Text="{Binding Cpu}" TextAlignment="Center" FontWeight="Bold"/>
+                        <ProgressBar Minimum="0" Maximum="50" Value="0" Width="100" VerticalAlignment="Top" Height="15" FontWeight="Heavy"/>
+                        <TextBlock Text="" TextAlignment="Center" FontWeight="Bold"/>
                     </Grid>
                     <TextBlock Text="Memory" Margin="30,0,8,0" FontWeight="Bold"/>
                     <Grid>
-                        <ProgressBar Value="{Binding Memory}" Width="100" VerticalAlignment="Top" Height="15"/>
-                        <TextBlock Text="{Binding Memory}" TextAlignment="Center"   FontWeight="UltraBold"/>
+                        <ProgressBar Value="0" Width="100" VerticalAlignment="Top" Height="15"/>
+                        <TextBlock Text="" TextAlignment="Center"   FontWeight="UltraBold"/>
                     </Grid>
                 </StackPanel>
             </StatusBarItem>
@@ -173,9 +172,9 @@
         </StatusBar>
     </Grid>
     <controls:MetroWindow.Flyouts>
-        <controls:FlyoutsControl>
-            <controls:Flyout x:Name="flySetting" IsOpen="{Binding FlyOutScheduleIsOpen}" Header="Schedule" Theme="Light" Position="Left" Width="{Binding FlyOutWidth}" CloseCommand="{Binding FlyOutSettingClose}">
-                <Grid>
+        <controls:FlyoutsControl Background="Black">
+            <controls:Flyout x:Name="flySetting" Height="300" IsOpen="{Binding FlyOutScheduleIsOpen}" Header="Schedule" Theme="Light" Position="Bottom"  CloseCommand="{Binding FlyOutSettingClose}">
+                <Grid Background="Black">
                     <DataGrid ItemsSource="{Binding DataSource}" AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="排程名稱" Binding="{Binding Schedule}"/>
