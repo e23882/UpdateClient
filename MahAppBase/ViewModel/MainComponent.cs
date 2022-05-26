@@ -270,7 +270,7 @@ namespace MahAppBase.ViewModel
 
         public void InitIcon()
         {
-            nIcon.Icon = new Icon("Icon.ico");
+            nIcon.Icon = MahAppBase.Properties.Resources.icon;
             nIcon.Visible = false;
             nIcon.MouseDoubleClick += NIcon_MouseDoubleClick;
             #region Init Contextmenu

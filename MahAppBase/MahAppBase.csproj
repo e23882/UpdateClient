@@ -252,6 +252,7 @@
     <Resource Include="Image\Donate.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Icon.ico" />
     <Content Include="Sound\Button.wav" />
     <Content Include="Sound\cat.wav" />
   </ItemGroup>
